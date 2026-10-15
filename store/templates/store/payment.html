@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment | Mini Amazon</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #eef2f8, #dfe8f5);
+            font-family: Arial, sans-serif;
+            color: #172337;
+        }
+
+        .payment-card {
+            width: 100%;
+            max-width: 480px;
+            padding: 32px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 45px #17233718;
+        }
+
+        .brand {
+            color: #ff9900;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        h1 { margin-bottom: 8px; }
+
+        .notice {
+            padding: 14px;
+            margin: 22px 0;
+            background: #fff6df;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+
+        .amount {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .message {
+            padding: 10px;
+            color: #b42318;
+            background: #fff0ef;
+            border-radius: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 14px;
+            border: 0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .success {
+            background: #ff9900;
+            color: #172337;
+        }
+
+        .success:hover {
+            background: #f5ad2d;
+            transform: translateY(-2px);
+        }
+
+        .failure {
+            background: #eef0f4;
+            color: #172337;
+        }
+
+        .failure:hover { background: #dfe3e9; }
+
+        .back {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #42536b;
+        }
+        
+.continue-shopping {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 18px;
+    padding: 14px 20px;
+    background: #172337;
+    color: #ffffff;
+    border: 1px solid #172337;
+    border-radius: 10px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    transition: all 0.25s ease;
+}
+
+.continue-shopping:hover {
+    background: #263b59;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px #17233730;
+}
+
+.continue-shopping:active {
+    transform: scale(0.98);
+}
+
+.continue-shopping:focus-visible {
+    outline: 3px solid #ff9900;
+    outline-offset: 3px;
+}
+
+    </style>
+</head>
+<body>
+    <main class="payment-card">
+        <div class="brand">Mini Amazon</div>
+        <h1>Demo Payment</h1>
+        <p>Order #{{ order.id }}</p>
+
+        <div class="notice">
+            <strong>Demo mode only</strong><br>
+            No real money will be charged. Do not enter actual
+            card details, CVV, or UPI PIN.
+        </div>
+
+        <div class="amount">
+            <span>Order Total</span>
+            <span>₹{{ order.total_amount|floatformat:2 }}</span>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <button class="success" type="submit"
+                    name="payment_action" value="success">
+                ✅ Simulate Successful Payment
+            </button>
+
+            <button class="failure" type="submit"
+                    name="payment_action" value="failure">
+                ❌ Simulate Failed Payment
+            </button>
+        </form>
+
+        <a class="continue-shopping" href="{% url 'home' %}">
+    ← Continue Shopping
+</a>
+    </main>
+</body>
+</html>

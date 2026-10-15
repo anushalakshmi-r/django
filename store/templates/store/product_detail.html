@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} | MiniAmazon</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #172337;
+        }
+
+        nav {
+            background: #131921;
+            color: white;
+            padding: 20px 6%;
+        }
+
+        nav a {
+            color: #ff9900;
+            text-decoration: none;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 45px auto;
+            padding: 25px;
+        }
+
+        .back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #394c66;
+            text-decoration: none;
+        }
+
+        .product {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            box-shadow: 0 8px 30px #0000000a;
+        }
+
+        .image-box {
+            min-height: 300px;
+            display: grid;
+            place-items: center;
+            background: #f8f9fc;
+            border-radius: 12px;
+        }
+
+        img {
+            width: 100%;
+            height: 320px;
+            object-fit: contain;
+        }
+
+        h1 { margin-top: 10px; }
+
+        .category {
+            color: #8a5a00;
+            background: #fff2db;
+            padding: 7px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            font-size: 13px;
+        }
+
+        .price {
+            color: #b12704;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .description {
+            line-height: 1.8;
+            color: #687386;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #ff9900;
+            color: #131921;
+            padding: 13px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 650px) {
+            .product {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .container { margin: 20px auto; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="/">MiniAmazon</a>
+    </nav>
+    <a href="{% url 'cart' %}">
+    🛒 Cart ({{ cart_count }})
+</a>
+
+    <main class="container">
+        <a href="/" class="back">← Back to shopping</a>
+
+        <div class="product">
+            <div class="image-box">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}"
+                         alt="{{ product.name }}">
+                {% else %}
+                    <p>Image not available</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <span class="category">{{ product.category.name }}</span>
+
+                <h1>{{ product.name }}</h1>
+
+                <p class="price">₹{{ product.price }}</p>
+
+                <h3>Product Description</h3>
+
+                <p class="description">
+                    {% if product.description %}
+                        {{ product.description }}
+                    {% else %}
+                        Discover {{ product.name }} at MiniAmazon.
+                        Contact us for more product information.
+                    {% endif %}
+                </p>
+                
+<form action="{% url 'add_to_cart' product.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="back-btn">
+        🛒 Add to Cart
+    </button>
+</form>
+
+<a href="{% url 'cart' %}" class="back-btn">
+    View Cart ({{ cart_count }})
+</a>
+
+
+                <a href="/" class="back-btn">Continue Shopping</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

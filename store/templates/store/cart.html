@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | MiniAmazon</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f9;
+            color: #172337;
+        }
+
+        nav {
+            background: #131921;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            color: white;
+        }
+
+        nav a {
+            color: #ff9900;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 20px;
+        }
+
+        .cart-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .details {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .price {
+            color: #b12704;
+            font-weight: bold;
+        }
+
+        input {
+            width: 65px;
+            padding: 8px;
+        }
+
+        button, .shop-btn {
+            border: none;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .update-btn, .shop-btn {
+            background: #ff9900;
+            color: #172337;
+            text-decoration: none;
+        }
+
+        .remove-btn {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .summary {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: right;
+            margin-top: 25px;
+        }
+
+        .empty {
+            background: white;
+            padding: 35px;
+            text-align: center;
+            border-radius: 12px;
+        }
+
+        @media (max-width: 500px) {
+            main { padding: 12px; }
+            .cart-item { gap: 12px; padding: 14px; }
+        }
+        
+.checkout-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 360px;
+    margin: 24px auto 10px;
+    padding: 15px 24px;
+    background: linear-gradient(135deg, #ffbd45, #ff9900);
+    color: #172337;
+    border: 1px solid #e88b00;
+    border-radius: 12px;
+    text-decoration: none;
+    text-align: center;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    box-shadow: 0 5px 14px rgba(255, 153, 0, 0.22);
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+    cursor: pointer;
+}
+
+.checkout-btn:hover {
+    background: linear-gradient(135deg, #ffd071, #f08804);
+    color: #172337;
+    transform: translateY(-3px);
+    box-shadow: 0 9px 22px rgba(255, 153, 0, 0.32);
+}
+
+.checkout-btn:active {
+    transform: scale(0.98);
+}
+
+.checkout-btn:focus-visible {
+    outline: 3px solid #172337;
+    outline-offset: 4px;
+}
+
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="/">MiniAmazon</a>
+        <a href="{% url 'cart' %}">🛒 Cart ({{ cart_count }})</a>
+    </nav>
+
+    <main>
+        <h1>🛒 Your Shopping Cart</h1>
+
+        {% for item in items %}
+            <div class="cart-item">
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}"
+                         alt="{{ item.product.name }}">
+                {% endif %}
+
+                <div class="details">
+                    <h3>{{ item.product.name }}</h3>
+
+                    <p class="price">
+                        ₹{{ item.product.price }}
+                    </p>
+
+                    <p>Subtotal: ₹{{ item.subtotal|floatformat:2 }}</p>
+                </div>
+
+                <form action="{% url 'update_cart' item.product.id %}"
+                      method="post">
+                    {% csrf_token %}
+                    <label>
+                        Qty
+                        <input type="number" name="quantity"
+                               value="{{ item.quantity }}"
+                               min="1" max="99" required>
+                    </label>
+
+                    <button class="update-btn" type="submit">
+                        Update
+                    </button>
+                </form>
+
+                <form action="{% url 'remove_from_cart' item.product.id %}"
+                      method="post">
+                    {% csrf_token %}
+                    <button class="remove-btn" type="submit">
+                        Remove
+                    </button>
+                </form>
+            </div>
+        {% empty %}
+            <div class="empty">
+                <h2>Your cart is empty!</h2>
+                <p>Explore our products and add your favourites.</p>
+                <a href="/" class="shop-btn">Continue Shopping</a>
+            </div>
+        {% endfor %}
+
+        {% if items %}
+            <div class="summary">
+                <h2>Total: ₹{{ total|floatformat:2 }}</h2>
+                <p>Payment and checkout are not included in this project.</p>
+                <a href="/" class="shop-btn">Continue Shopping</a>
+                <a href="{% url 'checkout' %}" class="checkout-btn">🛒 Proceed to Checkout →</a>
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>

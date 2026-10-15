@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed | Mini Amazon</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f8;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #172337;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            margin: 20px;
+            border-radius: 18px;
+            text-align: center;
+            max-width: 480px;
+            box-shadow: 0 8px 30px #00000010;
+        }
+        .check { font-size: 55px; }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 13px 24px;
+            background: #ff9900;
+            color: #172337;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="check">✅</div>
+        <h1>Order Placed!</h1>
+        <p>Thank you, {{ order.customer_name }}.</p>
+        <p>Your order ID is <strong>#{{ order.id }}</strong></p>
+        <p>Total: <strong>₹{{ order.total_amount|floatformat:2 }}</strong></p>
+        <p>Payment: {{ order.get_payment_method_display }}</p>
+        <p>Status: {{ order.get_order_status_display }}</p>
+        <a href="{% url 'home' %}">Continue Shopping</a>
+    </div>
+</body>
+</html>

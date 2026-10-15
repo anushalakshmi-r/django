@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Mini Amazon</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f8;
+            color: #172337;
+        }
+        header {
+            background: #131921;
+            color: white;
+            padding: 20px 6%;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        main {
+            max-width: 950px;
+            margin: 35px auto;
+            padding: 0 18px;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 22px;
+        }
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px #0000000a;
+        }
+        h2 { margin-top: 0; }
+        label {
+            display: block;
+            margin: 16px 0 7px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd2dc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        textarea { min-height: 100px; resize: vertical; }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 13px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: 0;
+            border-radius: 9px;
+            background: #ff9900;
+            color: #172337;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover { background: #f5a623; }
+        .message { color: #b42318; }
+        @media(max-width: 650px) {
+            main { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header>Mini Amazon · Checkout</header>
+
+    <main>
+        <section class="panel">
+            <h2>Delivery Details</h2>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="message">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <label for="customer_name">Full Name</label>
+                <input id="customer_name" name="customer_name"
+                       type="text" maxlength="100" required>
+
+                <label for="phone">Phone Number</label>
+                <input id="phone" name="phone" type="tel"
+                       minlength="10" maxlength="15"
+                       pattern="[0-9]{10,15}" required>
+
+                <label for="address">Delivery Address</label>
+                <textarea id="address" name="address"
+                          maxlength="2000" required></textarea>
+
+                <label for="payment_method">Payment Method</label>
+                <select id="payment_method" name="payment_method">
+                    <option value="COD">Cash on Delivery</option>
+                    <option value="ONLINE">Demo Online Payment</option>
+                </select>
+
+                <button type="submit">Continue to Place Order</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Order Summary</h2>
+
+            {% for item in items %}
+                <div class="item">
+                    <div>
+                        <strong>{{ item.product.name }}</strong>
+                        <div>Quantity: {{ item.quantity }}</div>
+                    </div>
+                    <span>₹{{ item.subtotal|floatformat:2 }}</span>
+                </div>
+            {% endfor %}
+
+            <div class="total">
+                <span>Total</span>
+                <span>₹{{ total|floatformat:2 }}</span>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
