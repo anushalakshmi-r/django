@@ -12,6 +12,10 @@ class HomeCatalogTests(TestCase):
         self.assertContains(response, "Electronics")
         self.assertContains(response, "Fashion")
         self.assertContains(response, "Gadgets")
+        self.assertContains(response, "Bluetooth Headphones")
+        self.assertContains(response, "Wireless over-ear headphones")
+        self.assertContains(response, "Gaming Keyboard")
+        self.assertContains(response, "Colorful mechanical keyboard")
         self.assertContains(response, "Jeans")
         self.assertContains(response, "Classic blue denim jeans")
         self.assertContains(response, "T-Shirt")
@@ -25,8 +29,13 @@ class HomeCatalogTests(TestCase):
         self.assertContains(response, "/media/products/images_6.jpg")
         self.assertContains(response, "/media/products/images_7.jpg")
 
+        electronics = Category.objects.get(name="Electronics")
         fashion = Category.objects.get(name="Fashion")
         gadgets = Category.objects.get(name="Gadgets")
+        self.assertSetEqual(
+            set(electronics.products.values_list("name", flat=True)),
+            {"Headphone", "Keyboard", "Bluetooth Headphones", "Gaming Keyboard"},
+        )
         self.assertSetEqual(
             set(fashion.products.values_list("name", flat=True)),
             {"Jeans", "T-Shirt"},
