@@ -332,6 +332,14 @@
             min-height: 23px;
         }
 
+        .product-description {
+            color: #687386;
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 39px;
+            margin: 0 0 14px;
+        }
+
         .product-bottom {
             display: flex;
             align-items: center;
@@ -693,8 +701,11 @@
         {{ product.name }}
     </a>
 </h3>
+                                                        <p class="product-description">
+                                                            {{ product.description|default:"Discover this product at MiniAmazon." }}
+                                                        </p>
 
-                                <div class="product-bottom">
+                                                        <div class="product-bottom">
                                     <p class="price">
                                         <span class="price-symbol">₹</span>{{ product.price }}
                                     </p>
@@ -784,4 +795,3 @@
 
 </body>
 </html>
-

@@ -14,9 +14,8 @@ def seed_catalog(apps, schema_editor):
         )
 
     products = (
-        ("Headphone", "1999.00", "products/images_1.jpg", "Good quality"),
-        ("Smart Watch", "2999.00", "products/images_2.jpg", "Smart watch"),
-        ("T-Shirt", "499.00", "products/images_3.jpg", "Cotton"),
+        ("Headphone", "1999.00", "products/images_7.jpg", "Good quality"),
+        ("Keyboard", "2999.00", "products/images_6.jpg", "Good Quality"),
     )
     for name, price, image, description in products:
         Product.objects.using(schema_editor.connection.alias).get_or_create(
